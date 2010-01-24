@@ -33,8 +33,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 	
 	DisableAutorun();
 
-	CreateMutexEx(NULL, L"KillAutorunMutex", CREATE_MUTEX_INITIAL_OWNER, MUTEX_ALL_ACCESS);
-
+	//CreateMutexEx(NULL, L"KillAutorunMutex", CREATE_MUTEX_INITIAL_OWNER, MUTEX_ALL_ACCESS);
+	CreateMutex(NULL, TRUE, TEXT("KillAutorunMutex"));
 	tmp = GetLastError();
 	if(tmp == ERROR_ALREADY_EXISTS)
 		return 0;

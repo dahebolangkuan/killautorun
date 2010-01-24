@@ -12,7 +12,7 @@ Source: "Release\KillAutorun.exe"; DestDir: "{app}"
 Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
 
 [Icons]
-Name: "{group}\My Program"; Filename: "{app}\KillAutorun.exe"
+Name: "{group}\KillAutorun"; Filename: "{app}\KillAutorun.exe"
 
 ; NOTE: Most apps do not need registry entries to be pre-created. If you
 ; don't know what the registry is or if you need to use it, then chances are
