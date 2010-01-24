@@ -1,0 +1,5 @@
+Building KillAutorun from source
+
+= Introduction =
+
+Building KillAutorun require gcc-mingw or Visual Studio. Solution file (*.sln) included in source tree is gnerated with VS2008SP1. Setup script included in source tree is written for [http://www.jrsoftware.org/isinfo.php Inno Setup 5]
