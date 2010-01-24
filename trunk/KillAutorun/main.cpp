@@ -247,13 +247,13 @@ void DisableAutorun(){
 	LONG res;
 	DWORD dwType, dwSize, dwData;
  
-	res = RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkey, &dwDisposition);
+	res = RegCreateKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"), &hkey);
 	if(res == ERROR_SUCCESS)
 	{
 		dwType = REG_DWORD;
 		dwSize = sizeof(DWORD);
 		dwData = 0x7c;
-		RegSetValueEx(hkey, TEXT("NoDriveTypeAutoRun"), 0, dwType, (PBYTE)&dwData, dwSize);
+		RegSetValue(hkey, TEXT("NoDriveTypeAutoRun"), dwType, (LPCTSTR)&dwData, dwSize);
 	 
 		RegCloseKey(hkey);
 	}
