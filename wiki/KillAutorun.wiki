@@ -2,7 +2,7 @@ A utility used to prevent damage from malicious autorun.inf file
 
 = Introduction =
 
-Autorun is widely used by computer virus to infect other computer via removable drive. Windows XP is particularly vulnerable to this kind of transmission due to its behavior of executing autorun.inf file automatically (Vista and 7 do not execute autorun script without user approval).
+Autorun is widely used by computer virus to infect other computer via removable drives. Windows XP is particularly vulnerable to this kind of transmission due to its behavior of executing autorun.inf file automatically (Vista and 7 do not execute autorun script without user approval).
 
 KillAutorun will help protect your Windows XP system using this steps: 
   # Disabling automatic execution of autorun script upon insertion of removable device. 
