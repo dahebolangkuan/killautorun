@@ -321,9 +321,13 @@ bool IsDiskDrive(const TCHAR *name){
 	DWORD dwType, dwSize, dwData;
 	TCHAR keypath[256], value[32];
 	wsprintf(keypath, L"SYSTEM\\CurrentControlSet\\Enum\\%s\\%s\\%s", buffer1, buffer2, buffer3);
-
-	RegGetValue(HKEY_LOCAL_MACHINE, keypath, TEXT("Class"), RRF_RT_REG_SZ, NULL, value, &dwSize);
+	dwSize = sizeof(value);
+	dwType = REG_SZ;
+	//RegGetValue(HKEY_LOCAL_MACHINE, keypath, TEXT("Class"), RRF_RT_REG_SZ, NULL, value, &dwSize);
+	RegOpenKeyEx(HKEY_LOCAL_MACHINE, keypath, 0, KEY_READ, &hkey);
 	
+	RegQueryValueEx(hkey, TEXT("Class"), NULL, &dwType, (LPBYTE) value, &dwSize); 
+
 	if(_tcscmp(value, TEXT("DiskDrive"))==0){
 		ret = true;
 	}
