@@ -8,6 +8,7 @@ KillAutorun will help protect your Windows XP system using this steps:
   * Disabling automatic execution of autorun script upon insertion of removable device. 
   * Automatic deletion of autorun.inf file from your removable drive upon insertion. This is done to prevent accidental invocation of autorun script by double-clicking drive's icon from Windows Explorer.
 
+KillAutorun is recommended for Windows XP user who often logged in to their computer as administrative user. You can also use DisableAutorun on Vista and 7 but some features might not work due to UAC.
 
 = Details =
 
