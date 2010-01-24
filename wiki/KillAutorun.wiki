@@ -1,4 +1,4 @@
-#A utility used to prevent damage from malicious autorun.inf file
+A utility used to prevent damage from malicious autorun.inf file
 
 = Introduction =
 
