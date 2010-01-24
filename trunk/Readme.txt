@@ -9,7 +9,7 @@ kind of transmission due to its behavior of executing autorun.inf
 file automatically (Vista and 7 do not execute autorun script without 
 user approval).
 
-KillAutorun will help protect your Windows XP system using this steps:
+KillAutorun will help protect your Windows XP system using these steps:
 
    1. Disabling automatic execution of autorun script 
       upon insertion of removable device.
