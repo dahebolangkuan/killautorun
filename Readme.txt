@@ -3,7 +3,7 @@ A utility used to prevent damage from malicious autorun.inf file
 
 License: New BSD License
 
-KillAutorun is widely used by computer virus to infect other computer 
+Autorun is widely used by computer virus to infect other computer 
 via removable drives. Windows XP is particularly vulnerable to this 
 kind of transmission due to its behavior of executing autorun.inf 
 file automatically (Vista and 7 do not execute autorun script without 
