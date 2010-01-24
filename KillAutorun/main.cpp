@@ -117,15 +117,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
       } 
     } 
     break;
-		/////////////////
 	case WM_USER_NIC:
 		if(wParam == 1){
 			if(lParam == WM_RBUTTONUP){
-				
-				//point.x = 10;
-				//point.y = 10;
 				GetCursorPos(&point);
-				//ClientToScreen(hWnd, &point);
 				TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL) ;
 			}
 		}
@@ -193,18 +188,24 @@ char GetDriveLetter(unsigned long ulUnitMask)
   return (c + 'A'); 
 }
 
+/// <summary>
+/// function to delete autorun.inf file from the specified drive
+/// </summary>
 void CleanAutorun(char DriveLetter){
 	char szMessage[80]; 
 	char file[256];
 	wsprintfA(file, "%c:\\autorun.inf", DriveLetter);
 	
 	SetFileAttributesA(file, FILE_ATTRIBUTE_NORMAL);
-	DeleteFileA(file);
+	DeleteFileA(file);	//delete autorun script if exist
 
 	wsprintfA(szMessage, "Device '%c:' has been inserted.", DriveLetter); 
 	MessageBoxA(NULL, szMessage, "USB Notice", MB_OK); 
 }
 
+/// <summary>
+/// Set registry value to disable autorun
+/// </summary>
 void DisableAutorun(){
 	HKEY   hkey;
 	DWORD  dwDisposition;
