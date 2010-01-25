@@ -6,6 +6,7 @@ DefaultGroupName=KillAutorun
 UninstallDisplayIcon={app}\KillAutorun.exe
 OutputDir=setup
 AlwaysRestart=yes
+Compression=lzma/ultra
 
 [Files]
 Source: "Release\KillAutorun.exe"; DestDir: "{app}"
