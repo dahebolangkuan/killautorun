@@ -5,6 +5,7 @@
 #include "resource.h"
 #include "banned.h"
 #include "main.h"
+#include "AsyncDelete.h"
 
 HICON hIcon;
 HINSTANCE hinstance;
@@ -81,7 +82,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 	Shell_NotifyIcon(NIM_ADD, &nib);
  
 
-	WorstCaseCleanAutorunX();
+	//WorstCaseCleanAutorunX();
 	if(hDlg == NULL)
 					hDlg = CreateDialog(hinstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, reinterpret_cast<DLGPROC>(DlgProc));
 				//ShowWindow(hDlg, SW_SHOW);
@@ -153,7 +154,7 @@ LRESULT CALLBACK DlgProc(HWND hWndDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 			{ 
 				PDEV_BROADCAST_VOLUME pVol = (PDEV_BROADCAST_VOLUME) pHdr; 
 				char cDriveLetter = GetDriveLetter(pVol->dbcv_unitmask); 
-				CleanAutorun(cDriveLetter);
+				DeleteAutorunAsync(cDriveLetter);
 			} 
 			else if(pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE){
 				PDEV_BROADCAST_DEVICEINTERFACE pVol = (PDEV_BROADCAST_DEVICEINTERFACE) pHdr; 
