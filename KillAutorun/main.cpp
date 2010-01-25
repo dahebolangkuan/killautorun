@@ -81,7 +81,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 	Shell_NotifyIcon(NIM_ADD, &nib);
  
 
-	
+	WorstCaseCleanAutorunX();
 	if(hDlg == NULL)
 					hDlg = CreateDialog(hinstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, reinterpret_cast<DLGPROC>(DlgProc));
 				//ShowWindow(hDlg, SW_SHOW);
@@ -179,6 +179,9 @@ LRESULT CALLBACK DlgProc(HWND hWndDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 		case IDOK:
 			ShowWindow(hWndDlg, SW_HIDE);
 			return TRUE;
+		case IDC_BUTTON_SCAN:
+			WorstCaseCleanAutorunX();
+			return TRUE;
 		}
 		break;
 	}
@@ -206,14 +209,32 @@ char GetDriveLetter(unsigned long ulUnitMask)
 /// function to delete autorun.inf file from the specified drive
 /// </summary>
 void CleanAutorun(char DriveLetter){
-	char szMessage[80]; 
+	char szMessage[256]; 
 	char file[256];
+	BOOL status = TRUE;
+	DWORD lastError = 0;
 	wsprintfA(file, "%c:\\autorun.inf", DriveLetter);
 	
 	SetFileAttributesA(file, FILE_ATTRIBUTE_NORMAL);
-	DeleteFileA(file);	//delete autorun script if exist
-
-	//wsprintfA(szMessage, "Device '%c:' has been inserted.", DriveLetter); 
+	status = DeleteFileA(file);	//delete autorun script if exist
+	if(status == 0) lastError = GetLastError();
+	if(lastError == ERROR_INVALID_PARAMETER){
+		for(int i = 0; i<100; i++){
+			Sleep(1000);
+			SetFileAttributesA(file, FILE_ATTRIBUTE_NORMAL);
+			status = DeleteFileA(file);	//delete autorun script if exist
+			if(status == 0) {
+				lastError = GetLastError();
+				if(lastError == ERROR_INVALID_PARAMETER){
+					
+				}
+				else {
+					break;
+				}
+			}
+		}
+	}
+	//wsprintfA(szMessage, "Device '%c:' has been inserted. Autorun deletion status: %i - lasterror: %i", DriveLetter, status, lastError); 
 	//MessageBoxA(NULL, szMessage, "USB Notice", MB_OK); 
 }
 
@@ -238,17 +259,30 @@ void DisableAutorun(){
 	}
 }
 
-/// <summary>
-/// I cant figure out how to find drive letter for certain removable media,
-/// so I have no choice but to use brute force :(
-/// </summary>
 void WorstCaseCleanAutorun(){
 	for(int i = 0; i < 60; i++){
-		for(char c = 'a'; c<='z'; c++){
-			CleanAutorun(c);
+		for(char c = 'c'; c<='z'; c++){
+			CleanAutorunX(c);
 		}
 		Sleep(1000);
 	}
+}
+
+void WorstCaseCleanAutorunX(){
+		for(char c = 'c'; c<='z'; c++){
+			CleanAutorunX(c);
+		}
+}
+
+void CleanAutorunX(char DriveLetter){
+	char szMessage[256]; 
+	char file[256];
+	BOOL status = TRUE;
+	DWORD lastError = 0;
+	wsprintfA(file, "%c:\\autorun.inf", DriveLetter);
+	
+	SetFileAttributesA(file, FILE_ATTRIBUTE_NORMAL);
+	status = DeleteFileA(file);	//delete autorun script if exist
 }
 
 /// <summary>
