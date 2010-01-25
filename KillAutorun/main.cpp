@@ -20,16 +20,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 
 	int tmp = 0;
 
-	DEV_BROADCAST_DEVICEINTERFACE NotificationFilter; 
-	HDEVNOTIFY hDeviceNotify = NULL; 
-	     
-	static const GUID GuidDevInterfaceList[] = 
-	{ 
-	  { 0xa5dcbf10, 0x6530, 0x11d2, { 0x90, 0x1f, 0x00, 0xc0, 0x4f, 0xb9, 0x51, 0xed } }, 
-	  { 0x53f56307, 0xb6bf, 0x11d0, { 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b } }, 
-	  { 0x4d1e55b2, 0xf16f, 0x11Cf, { 0x88, 0xcb, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30 } }, 
-	  { 0xad498944, 0x762f, 0x11d0, { 0x8d, 0xcb, 0x00, 0xc0, 0x4f, 0xc3, 0x35, 0x8c } } 
-	}; 
+
 	
 	DisableAutorun();
 
@@ -88,23 +79,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine,
 	nib.uVersion = NOTIFYICON_VERSION;
 
 	Shell_NotifyIcon(NIM_ADD, &nib);
-	
-	ZeroMemory(&NotificationFilter, sizeof(NotificationFilter)); 
-	 
-	NotificationFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE); 
-	NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE; 
-	 
-	for (int i = 0; i < sizeof(GuidDevInterfaceList); i++) 
-	{ 
-	  NotificationFilter.dbcc_classguid = GuidDevInterfaceList[i]; 
-	 
-	  hDeviceNotify = RegisterDeviceNotification(hWnd, &NotificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE); 
-	  if (hDeviceNotify == NULL) 
-	  { 
-		// Handle the error... 
-	  } 
-	}
+ 
 
+	
+	if(hDlg == NULL)
+					hDlg = CreateDialog(hinstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, reinterpret_cast<DLGPROC>(DlgProc));
+				//ShowWindow(hDlg, SW_SHOW);
 	while( GetMessage(&Msg, NULL, 0, 0) )
 	{
              TranslateMessage(&Msg);
@@ -128,30 +108,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(WM_QUIT);
         break;
 
-	case WM_DEVICECHANGE: 
-    { 
-      PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR) lParam; 
- 
-      switch (wParam) 
-      { 
-        case DBT_DEVICEARRIVAL: 
-			if (pHdr->dbch_devicetype == DBT_DEVTYP_VOLUME ) 
-			{ 
-				PDEV_BROADCAST_VOLUME pVol = (PDEV_BROADCAST_VOLUME) pHdr; 
-				char cDriveLetter = GetDriveLetter(pVol->dbcv_unitmask); 
-				CleanAutorun(cDriveLetter);
-			} 
-			else if(pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE){
-				PDEV_BROADCAST_DEVICEINTERFACE pVol = (PDEV_BROADCAST_DEVICEINTERFACE) pHdr; 
-				//char cDriveLetter = GetDriveLetter(pVol->dbcv_unitmask); 
-				if(IsDiskDrive(pVol->dbcc_name)&&(!isUsb)){
-					WorstCaseCleanAutorun();
-				}
-			}
-        break; 
-      } 
-    } 
-    break;
+	
 	case WM_USER_NIC:
 		if(wParam == 1){
 			if(lParam == WM_RBUTTONUP){
@@ -168,8 +125,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 				SendMessage(hWnd, WM_CLOSE, 0, 0);
 			  break;
 			case ID_POPUP_OPTIONS:
-				if(hDlg == NULL)
-					hDlg = CreateDialog(hinstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, reinterpret_cast<DLGPROC>(DlgProc));
 				ShowWindow(hDlg, SW_SHOW);
 			  break;
 		  }
@@ -186,19 +141,43 @@ LRESULT CALLBACK DlgProc(HWND hWndDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_INITDIALOG:
 		return TRUE;
-
+	case WM_DEVICECHANGE: 
+    { 
+      PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR) lParam; 
+	  
+ 
+      switch (wParam) 
+      { 
+        case DBT_DEVICEARRIVAL: 
+			if (pHdr->dbch_devicetype == DBT_DEVTYP_VOLUME ) 
+			{ 
+				PDEV_BROADCAST_VOLUME pVol = (PDEV_BROADCAST_VOLUME) pHdr; 
+				char cDriveLetter = GetDriveLetter(pVol->dbcv_unitmask); 
+				CleanAutorun(cDriveLetter);
+			} 
+			else if(pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE){
+				PDEV_BROADCAST_DEVICEINTERFACE pVol = (PDEV_BROADCAST_DEVICEINTERFACE) pHdr; 
+				PDEV_BROADCAST_VOLUME pVol1 = (PDEV_BROADCAST_VOLUME) lParam;
+				char cDriveLetter = GetDriveLetter(pVol1->dbcv_unitmask); 
+				bool tmp = IsDiskDrive(pVol->dbcc_name);
+				if(tmp&&(!isUsb)){
+					WorstCaseCleanAutorun();
+				}
+			}
+        break; 
+      } 
+    } 
+    break;
 	case WM_COMMAND:
 		switch(wParam)
 		{
 		case IDCLOSE:
 		case IDCANCEL:
-			EndDialog(hWndDlg, 0);
-			hDlg = NULL;
+			ShowWindow(hWndDlg, SW_HIDE);
 			return TRUE;
 			break;
 		case IDOK:
-			EndDialog(hWndDlg, 0);
-			hDlg = NULL;
+			ShowWindow(hWndDlg, SW_HIDE);
 			return TRUE;
 		}
 		break;
