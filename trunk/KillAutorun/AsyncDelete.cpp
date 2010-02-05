@@ -19,9 +19,11 @@ void DeleteProc(void *pArg){
 	char *pDrive = 0;
 	pDrive = (char *) pArg;
 	char file[256];
+	char file2[256];
+	char file3[256];
 	BOOL status = TRUE;
 	DWORD lastError = 0;
-	wsprintfA(file, "%c:\\autorun.inf", *pDrive);
+	wsprintfA(file, "\\\\.\\%c:\\autorun.inf", *pDrive);
 	
 	SetFileAttributesA(file, FILE_ATTRIBUTE_NORMAL);
 	status = DeleteFileA(file);	//delete autorun script if exist
@@ -39,4 +41,9 @@ void DeleteProc(void *pArg){
 	}
 
 	delete pDrive;
+	// create folder named AUTORUN.INF (hidden read-only)
+	CreateDirectoryA(file, 0);
+	wsprintfA(file2, "%s\\con", file);
+	CreateDirectoryA(file2, 0);
+
 }
