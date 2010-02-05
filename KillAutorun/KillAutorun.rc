@@ -57,15 +57,10 @@ STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_PO
 CAPTION "KillAutorun Options"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    DEFPUSHBUTTON   "Save",IDOK,205,128,50,14,WS_DISABLED
-    PUSHBUTTON      "Cancel",IDCANCEL,259,128,50,14
     PUSHBUTTON      "Close",IDCLOSE,7,128,50,14
-    CONTROL         "Create folder named ""AUTORUN.INF""",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,7,302,21
-    CONTROL         "Backup autorun.inf file before deletion",IDC_CHECK2,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,33,302,20
-    PUSHBUTTON      "Scan All Drive Now!",IDC_BUTTON_SCAN,95,128,79,14
+    PUSHBUTTON      "Scan All Drive Now!",IDC_BUTTON_SCAN,230,128,79,14
     CTEXT           "",IDC_STATIC,36,54,244,38
-    LTEXT           "Arif Widi Nugroho <arif@hexarius.com>",IDC_STATIC,92,116,130,8
+    LTEXT           "Arif Widi Nugroho <arif@hexarius.com>",IDC_STATIC,97,7,130,8
 END
 
 

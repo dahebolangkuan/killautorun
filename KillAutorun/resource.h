@@ -7,8 +7,6 @@
 #define IDI_ICON1                       107
 #define MAINICON                        107
 #define IDC_CHECK1                      1003
-#define IDC_CHECK2                      1004
-#define IDC_BUTTON1                     1005
 #define IDC_BUTTON_SCAN                 1005
 #define ID_OPTION                       40001
 #define ID_POPUP_OPTION                 40002
