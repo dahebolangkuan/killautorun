@@ -7,6 +7,8 @@
 #include "main.h"
 #include "AsyncDelete.h"
 
+#define _WIN32_IE 0x0500
+
 HICON hIcon;
 HINSTANCE hinstance;
 NOTIFYICONDATA	nib;
@@ -101,8 +103,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     switch(Msg)
     {
 	case WM_CREATE:
-          hMenu = LoadMenu(hinstance, MAKEINTRESOURCE(IDR_MENU1));
-		  hMenu = GetSubMenu(hMenu, 0);
+          
           break;
     case WM_DESTROY:
 		Shell_NotifyIcon(NIM_DELETE, &nib);
@@ -114,11 +115,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 		if(wParam == 1){
 			if(lParam == WM_RBUTTONUP){
 				GetCursorPos(&point);
-				TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL) ;
+				SetForegroundWindow(hWnd);
+				hMenu = LoadMenu(hinstance, MAKEINTRESOURCE(IDR_MENU1));
+				hMenu = GetSubMenu(hMenu, 0);
+				TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
+				PostMessage(hWnd, WM_NULL, 0, 0);
+				DestroyMenu(hMenu); 
 			}
 		}
-		
 		break;
+	
 	case WM_COMMAND:
           switch (LOWORD (wParam))
           {
